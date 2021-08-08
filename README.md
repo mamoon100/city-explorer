@@ -18,7 +18,7 @@ Sixth and last we take user input and handle the request and data from location 
 
 ## Architecture
 
-In this project i used react, axios, VSCode, git and github
+In this project i used react, Node, axios, sass, VSCode, git and github
 
 ## Change Log
 
