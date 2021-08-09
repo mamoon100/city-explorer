@@ -23,3 +23,7 @@ footer {
   grid-auto-rows: auto 1fr auto;
   background-color: white;
   gap: 30px; }
+
+@media (max-width: 576px) {
+  .container {
+    width: 25rem; } }

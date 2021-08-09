@@ -67,33 +67,35 @@ export default class Main extends Component {
   render() {
     return (
       <main>
-        <Container style={{ width: "30rem" }}>
+        <Container>
           {this.state.err && (
             <Alert variant="danger"> No location in this name</Alert>
           )}
-          <Row lg={12} xs={12}>
-            <InputGroup
-              className="mb-3"
-              onChange={(e) => {
-                this.setState({
-                  // @ts-ignore
-                  location: e.target.value,
-                });
-              }}
-            >
-              <FormControl
-                placeholder="City Name"
-                aria-label="City Name"
-                id="location"
-              />
-              <Button
-                variant="outline-secondary"
-                id="button-addon2"
-                onClick={this.handleLocation}
+          <Row>
+            <Col>
+              <InputGroup
+                className="mb-3"
+                onChange={(e) => {
+                  this.setState({
+                    // @ts-ignore
+                    location: e.target.value,
+                  });
+                }}
               >
-                Explore!
-              </Button>
-            </InputGroup>
+                <FormControl
+                  placeholder="City Name"
+                  aria-label="City Name"
+                  id="location"
+                />
+                <Button
+                  variant="outline-secondary"
+                  id="button-addon2"
+                  onClick={this.handleLocation}
+                >
+                  Explore!
+                </Button>
+              </InputGroup>
+            </Col>
           </Row>
           {this.state.displayName && (
             <Row>
