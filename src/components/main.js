@@ -12,10 +12,11 @@ import {
   Alert,
   Spinner,
 } from "react-bootstrap";
+import Weather from "./weather";
 import dotenv from "dotenv";
 dotenv.config();
 const myKey = process.env.REACT_APP_myKey;
-console.log(myKey);
+// console.log(myKey);
 
 export default class Main extends Component {
   constructor() {
@@ -28,6 +29,7 @@ export default class Main extends Component {
       displayName: "",
       src: "",
       err: false,
+      data: [],
     };
   }
   handleLocation = (e) => {
@@ -39,7 +41,6 @@ export default class Main extends Component {
         `https://eu1.locationiq.com/v1/search.php?key=${myKey}&q=${this.state.location}&format=json`
       )
       .then((res) => {
-        console.log(res);
         this.setState({
           err: false,
           lon: res.data[0].lon,
@@ -55,13 +56,39 @@ export default class Main extends Component {
           lat: "",
           displayName: "",
           src: "",
+          city: false,
         });
       })
       .then(() => {
         this.setState({
           loading: false,
         });
+        this.handleWeatherArray();
       });
+  };
+  handleWeatherArray = () => {
+    this.setState({
+      city: "",
+    });
+
+    /* `http://localhost:8080/weather?lat=${this.state.lat}&lon=${
+          this.state.lon
+        }&searchQuery=${this.state.displayName.split(",")[0]}` */
+    axios
+      .get(
+        `https://city-explorer-mamoun-api.herokuapp.com/weather?lat=${
+          this.state.lat
+        }&lon=${this.state.lon}&searchQuery=${
+          this.state.displayName.split(",")[0]
+        }`
+      )
+      .then((res) => {
+        this.setState({
+          city: this.state.displayName.split(",")[0],
+          data: res.data,
+        });
+      })
+      .catch((err) => {});
   };
 
   render() {
@@ -71,6 +98,7 @@ export default class Main extends Component {
           {this.state.err && (
             <Alert variant="danger"> No location in this name</Alert>
           )}
+
           <Row>
             <Col>
               <InputGroup
@@ -98,20 +126,19 @@ export default class Main extends Component {
             </Col>
           </Row>
           {this.state.displayName && (
-            <Row>
-              <Col>
-                <Card>
-                  <Row>
-                    {this.state.loading ? (
-                      <Spinner
-                        animation="border"
-                        role="status"
-                        variant="primary"
-                      />
-                    ) : (
-                      <Card.Img src={this.state.src} />
-                    )}
-                  </Row>
+            <Row lg={12}>
+              <Col lg={6}>
+                <Card className="mt-2">
+                  {this.state.loading ? (
+                    <Spinner
+                      animation="border"
+                      role="status"
+                      variant="primary"
+                    />
+                  ) : (
+                    <Card.Img src={this.state.src} />
+                  )}
+
                   <Card.Body>
                     <Card.Title>
                       {this.state.displayName}
@@ -125,6 +152,9 @@ export default class Main extends Component {
                     </Card.Text>
                   </Card.Body>
                 </Card>
+              </Col>
+              <Col lg={6}>
+                <Weather data={this.state.data} city={this.state.city} />
               </Col>
             </Row>
           )}
