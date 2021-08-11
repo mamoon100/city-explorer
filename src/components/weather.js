@@ -8,7 +8,6 @@ import scattered from "../assets/scattered clouds.png";
 export default class Weather extends Component {
   render() {
     return (
-      // <Card className="mt-2">
       <>
         <Card.Header>
           {this.props.city ? (
@@ -44,8 +43,6 @@ export default class Weather extends Component {
             })}
           </Card.Body>
         )}
-
-        {/* </Card> */}
       </>
     );
   }
