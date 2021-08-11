@@ -8,17 +8,15 @@ import {
   Col,
   FormControl,
   Card,
-  Badge,
   Alert,
   Spinner,
 } from "react-bootstrap";
 import Weather from "./weather";
 import dotenv from "dotenv";
-import Movie from "./movie";
+import Movies from "./Movies";
+import Map from "./map";
 dotenv.config();
 const myKey = process.env.REACT_APP_myKey;
-
-// console.log(myKey);
 
 export default class Main extends Component {
   constructor() {
@@ -32,7 +30,7 @@ export default class Main extends Component {
       src: "",
       err: false,
       data: [],
-      movies: [],
+      moviesArray: [],
       weatherAndMovie: true,
     };
   }
@@ -91,7 +89,7 @@ export default class Main extends Component {
         });
       })
       .catch((err) => {
-        console.log(err);
+        console.log("err");
       });
   };
   handleMovie = () => {
@@ -103,11 +101,11 @@ export default class Main extends Component {
       )
       .then((res) => {
         this.setState({
-          movies: res.data,
+          moviesArray: res.data,
         });
       })
       .catch((err) => {
-        console.log(err);
+        console.log("err");
       });
   };
 
@@ -128,6 +126,11 @@ export default class Main extends Component {
                     // @ts-ignore
                     location: e.target.value,
                   });
+                }}
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    this.handleLocation(e);
+                  }
                 }}
               >
                 <FormControl
@@ -156,21 +159,13 @@ export default class Main extends Component {
                       variant="primary"
                     />
                   ) : (
-                    <Card.Img src={this.state.src} />
+                    <Map
+                      src={this.state.src}
+                      displayName={this.state.displayName}
+                      lon={this.state.lon}
+                      lat={this.state.lat}
+                    />
                   )}
-
-                  <Card.Body>
-                    <Card.Title>
-                      {this.state.displayName}
-                      <Badge bg="secondary">City Name</Badge>
-                    </Card.Title>
-                    <Card.Text>
-                      {this.state.lon} <Badge bg="secondary">Longitude</Badge>
-                    </Card.Text>
-                    <Card.Text>
-                      {this.state.lat} <Badge bg="secondary">Latitude</Badge>
-                    </Card.Text>
-                  </Card.Body>
                 </Card>
               </Col>
               <Col lg={6}>
@@ -178,7 +173,7 @@ export default class Main extends Component {
                   {this.state.weatherAndMovie ? (
                     <Weather data={this.state.data} city={this.state.city} />
                   ) : (
-                    <Movie movieData={this.state.movies} />
+                    <Movies movieData={this.state.moviesArray} />
                   )}
                 </Card>
                 <Button

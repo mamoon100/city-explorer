@@ -6,9 +6,8 @@ export default class Movie extends Component {
     return (
       <Carousel>
         {this.props.movieData.map((item, index) => {
-          console.log(item);
           return (
-            <Carousel.Item key={item.title}>
+            <Carousel.Item key={item.title + index}>
               <img
                 className="d-block w-100"
                 src={
