@@ -8,7 +8,6 @@ import {
   Col,
   FormControl,
   Card,
-  Badge,
   Alert,
   Spinner,
 } from "react-bootstrap";
