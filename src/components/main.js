@@ -14,8 +14,10 @@ import {
 } from "react-bootstrap";
 import Weather from "./weather";
 import dotenv from "dotenv";
+import Movie from "./movie";
 dotenv.config();
 const myKey = process.env.REACT_APP_myKey;
+
 // console.log(myKey);
 
 export default class Main extends Component {
@@ -30,6 +32,8 @@ export default class Main extends Component {
       src: "",
       err: false,
       data: [],
+      movies: [],
+      weatherAndMovie: true,
     };
   }
   handleLocation = (e) => {
@@ -64,6 +68,7 @@ export default class Main extends Component {
           loading: false,
         });
         this.handleWeatherArray();
+        this.handleMovie();
       });
   };
   handleWeatherArray = () => {
@@ -71,9 +76,6 @@ export default class Main extends Component {
       city: "",
     });
 
-    /* `http://localhost:8080/weather?lat=${this.state.lat}&lon=${
-          this.state.lon
-        }&searchQuery=${this.state.displayName.split(",")[0]}` */
     axios
       .get(
         `https://city-explorer-mamoun-api.herokuapp.com/weather?lat=${
@@ -88,7 +90,25 @@ export default class Main extends Component {
           data: res.data,
         });
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  handleMovie = () => {
+    axios
+      .get(
+        `https://city-explorer-mamoun-api.herokuapp.com/movie?city=${
+          this.state.displayName.split(",")[0]
+        }`
+      )
+      .then((res) => {
+        this.setState({
+          movies: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   render() {
@@ -154,7 +174,27 @@ export default class Main extends Component {
                 </Card>
               </Col>
               <Col lg={6}>
-                <Weather data={this.state.data} city={this.state.city} />
+                <Card className="mt-2">
+                  {this.state.weatherAndMovie ? (
+                    <Weather data={this.state.data} city={this.state.city} />
+                  ) : (
+                    <Movie movieData={this.state.movies} />
+                  )}
+                </Card>
+                <Button
+                  style={{
+                    width: "100%",
+                  }}
+                  className="mt-2"
+                  variant="dark"
+                  onClick={() => {
+                    this.setState({
+                      weatherAndMovie: !this.state.weatherAndMovie,
+                    });
+                  }}
+                >
+                  {this.state.weatherAndMovie ? "Show Movies" : "Show Weather"}
+                </Button>
               </Col>
             </Row>
           )}
