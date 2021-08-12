@@ -8,7 +8,8 @@ export default class WeatherDay extends Component {
   render() {
     return (
       <>
-        {this.props.data.slice(0, 3).map((item, index) => {
+        <p>{`This Info Was Gathered in ${this.props.data.time}`}</p>
+        {this.props.data.data.slice(0, 3).map((item, index) => {
           return (
             <Card key={index}>
               <Card.Title>
