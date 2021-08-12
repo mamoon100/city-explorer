@@ -32,6 +32,8 @@ export default class Main extends Component {
       data: [],
       moviesArray: [],
       weatherAndMovie: true,
+      weatherTime: Date.now(),
+      movieTime: Date.now(),
     };
   }
   handleLocation = (e) => {
@@ -86,6 +88,7 @@ export default class Main extends Component {
         this.setState({
           city: this.state.displayName.split(",")[0],
           data: res.data,
+          // weatherTime: res.data.time,
         });
       })
       .catch((err) => {
@@ -102,6 +105,7 @@ export default class Main extends Component {
       .then((res) => {
         this.setState({
           moviesArray: res.data,
+          // movieTime: res.data.time,
         });
       })
       .catch((err) => {
